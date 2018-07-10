@@ -3,9 +3,15 @@ package pizzeria;
 import pizzeria.drinks.*;
 import pizzeria.food.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.stream.Stream;
 
 import static pizzeria.drinks.DrinkAddittion.*;
 import static pizzeria.food.Sauce.*;
@@ -15,51 +21,23 @@ public class PizzeriaMain {
     private static Scanner scanner = new Scanner( System.in );
     private static List<Drink> clientsDrinks = new ArrayList<>();
     private static List<Food> clientsDishes = new ArrayList<>();
+    private static String[] menu = readFile( "newmenu.txt" );
 
-    public static void main(String[] args) {
-        
-        String input, input2;
+
+    public static void main(String[] args) throws IOException {
+//        Drink drink = new Beer(  );
+
+
+        String input;
 
         do {
             printMainMenu();
             input = scanner.nextLine();
-                if (input.equals( "1" )) {
-                    do {
-                        printSubMenu( input );
-                        input2 = scanner.nextLine();
-                        if (input2.matches( "^[0-7]$" )) {
-                            addDrink( input2 );
-                            break;
-                        }
-                        else {
-                            System.out.println( "Tokio pasirinkimo nėra. Bandykite dar kartą.\n" );
-                        }
-                    } while (1>0);
-                } else if (input.equals( "2" )) {
-                    do {
-                        printSubMenu( input );
-                        input2 = scanner.nextLine();
-                        if (input2.matches( "^[0-3]$" )) {
-                            addFood( input2 );
-                            break;
-                        }
-                        else {
-                            System.out.println( "Tokio pasirinkimo nėra. Bandykite dar kartą.\n" );
-                        }
-                    } while (1>0);
-                } else if (input.equals( "3" )) {
-                    printSubMenu( input );
-                    emptyOrder();
-                } else if (input.equals( "4" )) {
-                    printSubMenu( input );
-                    printCheckout();
-                } else if (input.equals( "0" )) {
-                    System.out.println("Išeinama iš programos");
-                    break;
-                }
-                else {
-                    System.out.println( "Tokio pasirinkimo nėra. Bandykite dar kartą." );
-                }
+            if (input.equals( "0" )) {
+                System.out.println( "Išeinama iš programos" );
+                break;
+            }
+            mainLogic( input );
         } while (!input.equals( "0" ));
     }
 
@@ -82,7 +60,12 @@ public class PizzeriaMain {
 
             case "2":
                 System.out.println( "Pasirinkit maistą" );
-                System.out.println( "1. Pica wrap, 2. Pica salami, 3. Pica funghi, 0. Išeiti į pagrindinį menu" );
+                for (String item : menu) {
+                    if(item.startsWith( "4" )) {
+                        break;
+                    }
+                    System.out.print(item + ", ");
+                }
                 break;
 
             case "3":
@@ -103,9 +86,67 @@ public class PizzeriaMain {
     }
 
 
-
     static void addDrink(String input2) {
+        String input3;
+        switch (input2) {
+            case "1": {
+                System.out.println( "Įveskite kiekį" );
+                input3 = scanner.nextLine();
+                pickQuantityAndWaterAdd( input3, "still" );
+                break;
+            }
+            case "2": {
+                System.out.println( "Įveskite kiekį" );
+                input3 = scanner.nextLine();
+                pickQuantityAndWaterAdd( input3, "sparkling" );
+                break;
+            }
+            case "3": {
+                System.out.println( "Įveskite kiekį" );
+                input3 = scanner.nextLine();
+                pickQuantityAndBeerAdd( input3, "light" );
+                break;
+            }
+            case "4": {
+                System.out.println( "Įveskite kiekį" );
+                input3 = scanner.nextLine();
+                pickQuantityAndBeerAdd( input3, "dark" );
+                break;
+            }
+            case "5": {
+                System.out.println( "Įveskite kiekį" );
+                input3 = scanner.nextLine();
+                pickQuantityAndBeerAdd( input3, "white" );
+                break;
+            }
+
+            case "6": {
+                System.out.println( "Įveskite kiekį" );
+                input3 = scanner.nextLine();
+                pickQuantityAndCoffeeAdd( input3, "");
+                break;
+            }
+            case "7": {
+                System.out.println( "Įveskite kiekį" );
+                input3 = scanner.nextLine();
+                pickQuantityAndTeaAdd( input3, "");
+                break;
+            }
+            case "0": {
+                System.out.println( "Išeinama į pagrindinį." );
+                break;
+            }
+            default: {
+                System.out.println( "Tokio pasirinkimo nėra. Bandykite dar kartą." );
+                break;
+            }
+        }
+    }
+
+    public static void addFood(String input2) {
+
         String input3, input4;
+
         switch (input2) {
             case "1": {
                 boolean flag = false;
@@ -113,16 +154,24 @@ public class PizzeriaMain {
                     System.out.println( "Įveskite kiekį" );
                     input3 = scanner.nextLine();
                     if (input3.matches( "^[1-9]\\d*$" )) {
-                        System.out.println( "Pasirinkite priedą: 1.Citrina, 0.Be priedų" );
+                        System.out.println( "Pasirinkite padažą: 1.Švelnus, 2.Mix, 3.Aštrus, 0.Be padažo" );
                         input4 = scanner.nextLine();
                         if (input4.equals( "1" )) {
-                            selectWater( "still", Integer.parseInt( input3 ), CITRINA );
+                            selectPizza( "wrap", Integer.parseInt( input3 ), MILD );
                             flag = true;
-                            System.out.println("Užsakymas sėkmingai papildytas");
+                            System.out.println( "Užsakymas sėkmingai papildytas" );
+                        } else if (input4.equals( "2" )) {
+                            selectPizza( "wrap", Integer.parseInt( input3 ), MIX );
+                            flag = true;
+                            System.out.println( "Užsakymas sėkmingai papildytas" );
+                        } else if (input4.equals( "3" )) {
+                            selectPizza( "wrap", Integer.parseInt( input3 ), HOT );
+                            flag = true;
+                            System.out.println( "Užsakymas sėkmingai papildytas" );
                         } else if (input4.equals( "0" )) {
-                            selectWater( "still", Integer.parseInt( input3 ), NONE );
+                            selectPizza( "wrap", Integer.parseInt( input3 ), NO_SAUCE );
                             flag = true;
-                            System.out.println("Užsakymas sėkmingai papildytas");
+                            System.out.println( "Užsakymas sėkmingai papildytas" );
                         } else {
                             System.out.println( "Tokio pasirinkimo nėra. Bandykite dar kartą." );
                         }
@@ -138,16 +187,24 @@ public class PizzeriaMain {
                     System.out.println( "Įveskite kiekį" );
                     input3 = scanner.nextLine();
                     if (input3.matches( "^[1-9]\\d*$" )) {
-                        System.out.println( "Pasirinkite priedą: 1.Citrina, 0.Be priedų" );
+                        System.out.println( "Pasirinkite padažą: 1.Švelnus, 2.Mix, 3.Aštrus, 0.Be padažo" );
                         input4 = scanner.nextLine();
                         if (input4.equals( "1" )) {
-                            selectWater( "sparkling", Integer.parseInt( input3 ), CITRINA );
+                            selectPizza( "salami", Integer.parseInt( input3 ), MILD );
                             flag = true;
-                            System.out.println("Užsakymas sėkmingai papildytas");
+                            System.out.println( "Užsakymas sėkmingai papildytas" );
+                        } else if (input4.equals( "2" )) {
+                            selectPizza( "salami", Integer.parseInt( input3 ), MIX );
+                            flag = true;
+                            System.out.println( "Užsakymas sėkmingai papildytas" );
+                        } else if (input4.equals( "3" )) {
+                            selectPizza( "salami", Integer.parseInt( input3 ), HOT );
+                            flag = true;
+                            System.out.println( "Užsakymas sėkmingai papildytas" );
                         } else if (input4.equals( "0" )) {
-                            selectWater( "sparkling", Integer.parseInt( input3 ), NONE );
+                            selectPizza( "salami", Integer.parseInt( input3 ), NO_SAUCE );
                             flag = true;
-                            System.out.println("Užsakymas sėkmingai papildytas");
+                            System.out.println( "Užsakymas sėkmingai papildytas" );
                         } else {
                             System.out.println( "Tokio pasirinkimo nėra. Bandykite dar kartą." );
                         }
@@ -163,124 +220,24 @@ public class PizzeriaMain {
                     System.out.println( "Įveskite kiekį" );
                     input3 = scanner.nextLine();
                     if (input3.matches( "^[1-9]\\d*$" )) {
-                        System.out.println( "Pasirinkite priedą: 1.Citrina, 0.Be priedų" );
+                        System.out.println( "Pasirinkite padažą: 1.Švelnus, 2.Mix, 3.Aštrus, 0.Be padažo" );
                         input4 = scanner.nextLine();
                         if (input4.equals( "1" )) {
-                            selectBeer( "light", Integer.parseInt( input3 ), CITRINA );
+                            selectPizza( "funghi", Integer.parseInt( input3 ), MILD );
                             flag = true;
-                            System.out.println("Užsakymas sėkmingai papildytas");
-                        } else if (input4.equals( "0" )) {
-                            selectBeer( "light", Integer.parseInt( input3 ), NONE );
-                            flag = true;
-                            System.out.println("Užsakymas sėkmingai papildytas");
-                        } else {
-                            System.out.println( "Tokio pasirinkimo nėra. Bandykite dar kartą." );
-                        }
-                    } else {
-                        System.out.println( "Klaidingai nurodytas kiekis. Bandykite dar kartą" );
-                    }
-                } while (!flag);
-                break;
-            }
-            case "4": {
-                boolean flag = false;
-                do {
-                    System.out.println( "Įveskite kiekį" );
-                    input3 = scanner.nextLine();
-                    if (input3.matches( "^[1-9]\\d*$" )) {
-                        System.out.println( "Pasirinkite priedą: 1.Citrina, 0.Be priedų" );
-                        input4 = scanner.nextLine();
-                        if (input4.equals( "1" )) {
-                            selectBeer( "dark", Integer.parseInt( input3 ), CITRINA );
-                            flag = true;
-                            System.out.println("Užsakymas sėkmingai papildytas");
-                        } else if (input4.equals( "0" )) {
-                            selectBeer( "dark", Integer.parseInt( input3 ), NONE );
-                            flag = true;
-                            System.out.println("Užsakymas sėkmingai papildytas");
-                        } else {
-                            System.out.println( "Tokio pasirinkimo nėra. Bandykite dar kartą." );
-                        }
-                    } else {
-                        System.out.println( "Klaidingai nurodytas kiekis. Bandykite dar kartą" );
-                    }
-                } while (!flag);
-                break;
-            }
-            case "5": {
-                boolean flag = false;
-                do {
-                    System.out.println( "Įveskite kiekį" );
-                    input3 = scanner.nextLine();
-                    if (input3.matches( "^[1-9]\\d*$" )) {
-                        System.out.println( "Pasirinkite priedą: 1.Citrina, 0.Be priedų" );
-                        input4 = scanner.nextLine();
-                        if (input4.equals( "1" )) {
-                            selectBeer( "white", Integer.parseInt( input3 ), CITRINA );
-                            flag = true;
-                            System.out.println("Užsakymas sėkmingai papildytas");
-                        } else if (input4.equals( "0" )) {
-                            selectBeer( "white", Integer.parseInt( input3 ), NONE );
-                            flag = true;
-                            System.out.println("Užsakymas sėkmingai papildytas");
-                        } else {
-                            System.out.println( "Tokio pasirinkimo nėra. Bandykite dar kartą." );
-                        }
-                    } else {
-                        System.out.println( "Klaidingai nurodytas kiekis. Bandykite dar kartą" );
-                    }
-                } while (!flag);
-                break;
-            }
-            case "6": {
-                boolean flag = false;
-                do {
-                    System.out.println( "Įveskite kiekį" );
-                    input3 = scanner.nextLine();
-                    if (input3.matches( "^[1-9]\\d*$" )) {
-                        System.out.println( "Pasirinkite priedą: 1.Pienas, 2.Cukrus, 0.Be priedų" );
-                        input4 = scanner.nextLine();
-                        if (input4.equals( "1" )) {
-                            selectCoffee( Integer.parseInt( input3 ), PIENAS );
-                            flag = true;
-                            System.out.println("Užsakymas sėkmingai papildytas");
+                            System.out.println( "Užsakymas sėkmingai papildytas" );
                         } else if (input4.equals( "2" )) {
-                            selectCoffee( Integer.parseInt( input3 ), CUKRUS );
+                            selectPizza( "funghi", Integer.parseInt( input3 ), MIX );
                             flag = true;
-                            System.out.println("Užsakymas sėkmingai papildytas");
+                            System.out.println( "Užsakymas sėkmingai papildytas" );
+                        } else if (input4.equals( "3" )) {
+                            selectPizza( "funghi", Integer.parseInt( input3 ), HOT );
+                            flag = true;
+                            System.out.println( "Užsakymas sėkmingai papildytas" );
                         } else if (input4.equals( "0" )) {
-                            selectCoffee( Integer.parseInt( input3 ), NONE );
+                            selectPizza( "funghi", Integer.parseInt( input3 ), NO_SAUCE );
                             flag = true;
-                            System.out.println("Užsakymas sėkmingai papildytas");
-                        } else {
-                            System.out.println( "Tokio pasirinkimo nėra. Bandykite dar kartą." );
-                        }
-                    } else {
-                        System.out.println( "Klaidingai nurodytas kiekis. Bandykite dar kartą" );
-                    }
-                } while (!flag);
-                break;
-            }
-            case "7": {
-                boolean flag = false;
-                do {
-                    System.out.println( "Įveskite kiekį" );
-                    input3 = scanner.nextLine();
-                    if (input3.matches( "^[1-9]\\d*$" )) {
-                        System.out.println( "Pasirinkite priedą: 1.Medus, 2.Cukrus, 0.Be priedų" );
-                        input4 = scanner.nextLine();
-                        if (input4.equals( "1" )) {
-                            selectTea( Integer.parseInt( input3 ), MEDUS );
-                            flag = true;
-                            System.out.println("Užsakymas sėkmingai papildytas");
-                        } else if (input4.equals( "2" )) {
-                            selectTea( Integer.parseInt( input3 ), CUKRUS );
-                            flag = true;
-                            System.out.println("Užsakymas sėkmingai papildytas");
-                        } else if (input4.equals( "0" )) {
-                            selectTea( Integer.parseInt( input3 ), NONE );
-                            flag = true;
-                            System.out.println("Užsakymas sėkmingai papildytas");
+                            System.out.println( "Užsakymas sėkmingai papildytas" );
                         } else {
                             System.out.println( "Tokio pasirinkimo nėra. Bandykite dar kartą." );
                         }
@@ -291,7 +248,7 @@ public class PizzeriaMain {
                 break;
             }
             case "0": {
-                System.out.println("Išeinama į pagrindinį.");
+                System.out.println( "Išeinama į pagrindinį." );
                 break;
             }
             default: {
@@ -301,185 +258,69 @@ public class PizzeriaMain {
         }
     }
 
-        public static void addFood (String input2) {
+    public static void emptyOrder() {
+        clientsDishes.clear();
+        clientsDrinks.clear();
+    }
 
-            String input3, input4;
-
-            switch (input2) {
-                case "1": {
-                    boolean flag = false;
-                    do {
-                        System.out.println( "Įveskite kiekį" );
-                        input3 = scanner.nextLine();
-                        if (input3.matches( "^[1-9]\\d*$" )) {
-                            System.out.println( "Pasirinkite padažą: 1.Švelnus, 2.Mix, 3.Aštrus, 0.Be padažo" );
-                            input4 = scanner.nextLine();
-                            if (input4.equals( "1" )) {
-                                selectPizza( "wrap", Integer.parseInt( input3 ), MILD );
-                                flag = true;
-                                System.out.println("Užsakymas sėkmingai papildytas");
-                            } else if (input4.equals( "2" )) {
-                                selectPizza( "wrap", Integer.parseInt( input3 ), MIX );
-                                flag = true;
-                                System.out.println("Užsakymas sėkmingai papildytas");
-                            } else if (input4.equals( "3" )) {
-                                selectPizza( "wrap", Integer.parseInt( input3 ), HOT );
-                                flag = true;
-                                System.out.println("Užsakymas sėkmingai papildytas");
-                            } else if (input4.equals( "0" )) {
-                                    selectPizza( "wrap", Integer.parseInt( input3 ), NO_SAUCE );
-                                    flag = true;
-                                System.out.println("Užsakymas sėkmingai papildytas");
-                            } else {
-                                System.out.println( "Tokio pasirinkimo nėra. Bandykite dar kartą." );
-                            }
-                        } else {
-                            System.out.println( "Klaidingai nurodytas kiekis. Bandykite dar kartą" );
-                        }
-                    } while (!flag);
-                    break;
-                }
-                case "2": {
-                    boolean flag = false;
-                    do {
-                        System.out.println( "Įveskite kiekį" );
-                        input3 = scanner.nextLine();
-                        if (input3.matches( "^[1-9]\\d*$" )) {
-                            System.out.println( "Pasirinkite padažą: 1.Švelnus, 2.Mix, 3.Aštrus, 0.Be padažo" );
-                            input4 = scanner.nextLine();
-                            if (input4.equals( "1" )) {
-                                selectPizza( "salami", Integer.parseInt( input3 ), MILD );
-                                flag = true;
-                                System.out.println("Užsakymas sėkmingai papildytas");
-                            } else if (input4.equals( "2" )) {
-                                selectPizza( "salami", Integer.parseInt( input3 ), MIX );
-                                flag = true;
-                                System.out.println("Užsakymas sėkmingai papildytas");
-                            } else if (input4.equals( "3" )) {
-                                selectPizza( "salami", Integer.parseInt( input3 ), HOT );
-                                flag = true;
-                                System.out.println("Užsakymas sėkmingai papildytas");
-                            } else if (input4.equals( "0" )) {
-                                selectPizza( "salami", Integer.parseInt( input3 ), NO_SAUCE );
-                                flag = true;
-                                System.out.println("Užsakymas sėkmingai papildytas");
-                            } else {
-                                System.out.println( "Tokio pasirinkimo nėra. Bandykite dar kartą." );
-                            }
-                        } else {
-                            System.out.println( "Klaidingai nurodytas kiekis. Bandykite dar kartą" );
-                        }
-                    } while (!flag);
-                    break;
-                }
-                case "3": {
-                    boolean flag = false;
-                    do {
-                        System.out.println( "Įveskite kiekį" );
-                        input3 = scanner.nextLine();
-                        if (input3.matches( "^[1-9]\\d*$" )) {
-                            System.out.println( "Pasirinkite padažą: 1.Švelnus, 2.Mix, 3.Aštrus, 0.Be padažo" );
-                            input4 = scanner.nextLine();
-                            if (input4.equals( "1" )) {
-                                selectPizza( "funghi", Integer.parseInt( input3 ), MILD );
-                                flag = true;
-                                System.out.println("Užsakymas sėkmingai papildytas");
-                            } else if (input4.equals( "2" )) {
-                                selectPizza( "funghi", Integer.parseInt( input3 ), MIX );
-                                flag = true;
-                                System.out.println("Užsakymas sėkmingai papildytas");
-                            } else if (input4.equals( "3" )) {
-                                selectPizza( "funghi", Integer.parseInt( input3 ), HOT );
-                                flag = true;
-                                System.out.println("Užsakymas sėkmingai papildytas");
-                            } else if (input4.equals( "0" )) {
-                                selectPizza( "funghi", Integer.parseInt( input3 ), NO_SAUCE );
-                                flag = true;
-                                System.out.println("Užsakymas sėkmingai papildytas");
-                            } else {
-                                System.out.println( "Tokio pasirinkimo nėra. Bandykite dar kartą." );
-                            }
-                        } else {
-                            System.out.println( "Klaidingai nurodytas kiekis. Bandykite dar kartą" );
-                        }
-                    } while (!flag);
-                    break;
-                }
-                case "0": {
-                    System.out.println("Išeinama į pagrindinį.");
-                    break;
-                }
-                default: {
-                    System.out.println( "Tokio pasirinkimo nėra. Bandykite dar kartą." );
-                    break;
-                }
+    public static void printCheckout() {
+        double sum = 0;
+        for (Drink a : clientsDrinks) {
+            try {
+                System.out.println( a.getName() + ":  kaina: " + a.getPrice() + ", kiekis: " + a.getQuantity() + ", suma: " + a.calculateItemPrice() );
+                sum += a.calculateItemPrice();
+                System.out.println( a.getDrinkAddName() + ": kaina: " + a.getDrinkAddPrice() + ", kiekis: " + a.getQuantity() + ", suma: " + (a.getDrinkAddPrice() * a.getQuantity()) );
+                sum += (a.getDrinkAddPrice() * a.getQuantity());
+            } catch (NullPointerException e) {
+                System.out.println( "Priedai: 0" );
             }
         }
-
-        public static void emptyOrder () {
-            clientsDishes.clear();
-            clientsDrinks.clear();
-        }
-
-        public static void printCheckout() {
-            double sum = 0;
-            for (Drink a : clientsDrinks) {
-                try {
-                    System.out.println( a.getName() + ":  kaina: " + a.getPrice() + ", kiekis: " + a.getQuantity() + ", suma: " + a.calculateItemPrice() );
-                    sum += a.calculateItemPrice();
-                    System.out.println( a.getDrinkAddName() + ": kaina: " + a.getDrinkAddPrice() + ", kiekis: " + a.getQuantity() + ", suma: " + (a.getDrinkAddPrice() * a.getQuantity()) );
-                    sum += (a.getDrinkAddPrice() * a.getQuantity());
-                } catch (NullPointerException e) {
-                    System.out.println("Priedai: 0");
-                }
+        for (Food a : clientsDishes) {
+            try {
+                System.out.println( a.getName() + ":  kaina: " + a.getPrice() + ", kiekis: " + a.getQuantity() + ", suma: " + a.calculateItemPrice() );
+                sum += a.calculateItemPrice();
+                System.out.println( a.getSaucename() + ": kaina: " + a.getSaucePrice() + ", kiekis: " + a.getQuantity() + ", suma: " + (a.getSaucePrice() * a.getQuantity()) );
+                sum += (a.getSaucePrice() * a.getQuantity());
+            } catch (NullPointerException e) {
+                System.out.println( "Priedai: 0" );
             }
-            for (Food a : clientsDishes) {
-                try {
-                    System.out.println( a.getName() + ":  kaina: " + a.getPrice() + ", kiekis: " + a.getQuantity() + ", suma: " + a.calculateItemPrice() );
-                    sum += a.calculateItemPrice();
-                    System.out.println( a.getSaucename() + ": kaina: " + a.getSaucePrice() + ", kiekis: " + a.getQuantity() + ", suma: " + (a.getSaucePrice() * a.getQuantity()) );
-                    sum += (a.getSaucePrice() * a.getQuantity());
-                } catch (NullPointerException e) {
-                    System.out.println( "Priedai: 0" );
-                }
-            }
-            System.out.println("Viso suma: " + sum);
-            clientsDrinks.clear();
-            clientsDishes.clear();
-
         }
+        System.out.println( "Viso suma: " + sum );
+        emptyOrder();
 
-        static void selectWater(String sort, int quantity, DrinkAddittion addition) {
+    }
 
-            Drink drink1 = new Water( sort );
-            drink1.setQuantity(quantity);
-            drink1.setDrinkAddittion(addition);
-            clientsDrinks.add( drink1 );
-        }
+    static void selectWater(String sort, int quantity, DrinkAddittion addition) {
 
-        static void selectBeer(String sort, int quantity, DrinkAddittion addition) {
-            Drink drink1 = new Beer( sort );
-            drink1.setQuantity(quantity);
-            drink1.setDrinkAddittion(addition);
-            clientsDrinks.add( drink1 );
-        }
-
-    static void selectCoffee( int quantity, DrinkAddittion addition) {
-        Drink drink1 = new Coffee();
-        drink1.setQuantity(quantity);
-        drink1.setDrinkAddittion(addition);
+        Drink drink1 = new Water( sort );
+        drink1.setQuantity( quantity );
+        drink1.setDrinkAddittion( addition );
         clientsDrinks.add( drink1 );
     }
 
-    static void selectTea( int quantity, DrinkAddittion addition) {
+    static void selectBeer(String sort, int quantity, DrinkAddittion addition) {
+        Drink drink1 = new Beer( sort );
+        drink1.setQuantity( quantity );
+        drink1.setDrinkAddittion( addition );
+        clientsDrinks.add( drink1 );
+    }
+
+    static void selectCoffee(int quantity, DrinkAddittion addition) {
+        Drink drink1 = new Coffee();
+        drink1.setQuantity( quantity );
+        drink1.setDrinkAddittion( addition );
+        clientsDrinks.add( drink1 );
+    }
+
+    static void selectTea(int quantity, DrinkAddittion addition) {
         Drink drink1 = new Tea();
-        drink1.setQuantity(quantity);
-        drink1.setDrinkAddittion(addition);
+        drink1.setQuantity( quantity );
+        drink1.setDrinkAddittion( addition );
         clientsDrinks.add( drink1 );
     }
 
     static void selectPizza(String sort, int quantity, Sauce sauce) {
-        if(sort.equals( "wrap" )) {
+        if (sort.equals( "wrap" )) {
             Food food1 = new PizzaWrap();
             food1.setQuantity( quantity );
             food1.setSauce( sauce );
@@ -489,11 +330,192 @@ public class PizzeriaMain {
             food1.setQuantity( quantity );
             food1.setSauce( sauce );
             clientsDishes.add( food1 );
-        }  else if (sort.equals( "funghi" )) {
+        } else if (sort.equals( "funghi" )) {
             Food food1 = new PizzaFunghi();
             food1.setQuantity( quantity );
             food1.setSauce( sauce );
             clientsDishes.add( food1 );
         }
     }
+
+    static void mainLogic(String input) {
+        String input2;
+        if (input.equals( "1" )) {
+            do {
+                printSubMenu( input  );
+                input2 = scanner.nextLine();
+                if (input2.matches( "^[0-7]$" )) {
+                    addDrink( input2 );
+                    break;
+                } else {
+                    System.out.println( "Tokio pasirinkimo nėra. Bandykite dar kartą.\n" );
+                }
+            } while (1 > 0);
+        } else if (input.equals( "2" )) {
+            do {
+                printSubMenu( input );
+                input2 = scanner.nextLine();
+                if (input2.matches( "^[0-3]$" )) {
+                    addFood( input2 );
+                    break;
+                } else {
+                    System.out.println( "Tokio pasirinkimo nėra. Bandykite dar kartą.\n" );
+                }
+            } while (1 > 0);
+        } else if (input.equals( "3" )) {
+            printSubMenu( input );
+            emptyOrder();
+        } else if (input.equals( "4" )) {
+            printSubMenu( input );
+            printCheckout();
+        } else {
+            System.out.println( "Tokio pasirinkimo nėra. Bandykite dar kartą." );
+        }
     }
+
+    static void pickQuantityAndWaterAdd(String input3, String sort) {
+        boolean flag = false;
+        String input4;
+        do {
+            if (input3.matches( "^[1-9]\\d*$" )) {
+                System.out.println( "Pasirinkite priedą: 1.Citrina, 0.Be priedų" );
+                input4 = scanner.nextLine();
+                if (input4.equals( "1" )) {
+                    selectWater( sort, Integer.parseInt( input3 ), CITRINA );
+                    flag = true;
+                    System.out.println( "Užsakymas sėkmingai papildytas" );
+                } else if (input4.equals( "0" )) {
+                    selectWater( sort, Integer.parseInt( input3 ), NONE );
+                    flag = true;
+                    System.out.println( "Užsakymas sėkmingai papildytas" );
+                } else {
+                    System.out.println( "Tokio pasirinkimo nėra. Bandykite dar kartą." );
+                }
+            } else {
+                System.out.println( "Klaidingai nurodytas kiekis. Bandykite dar kartą" );
+                break;
+            }
+        } while (!flag);
+    }
+
+    private static void pickQuantityAndBeerAdd(String input3, String sort) {
+        boolean flag = false;
+        String input4;
+        do {
+            if (input3.matches( "^[1-9]\\d*$" )) {
+                System.out.println( "Pasirinkite priedą: 1.Citrina, 0.Be priedų" );
+                input4 = scanner.nextLine();
+                if (input4.equals( "1" )) {
+                    selectBeer( sort, Integer.parseInt( input3 ), CITRINA );
+                    flag = true;
+                    System.out.println( "Užsakymas sėkmingai papildytas" );
+                } else if (input4.equals( "0" )) {
+                    selectBeer( sort, Integer.parseInt( input3 ), NONE );
+                    flag = true;
+                    System.out.println( "Užsakymas sėkmingai papildytas" );
+                } else {
+                    System.out.println( "Tokio pasirinkimo nėra. Bandykite dar kartą." );
+                }
+            } else {
+                System.out.println( "Klaidingai nurodytas kiekis. Bandykite dar kartą" );
+                break;
+            }
+        } while (!flag);
+    }
+
+    static void pickQuantityAndCoffeeAdd(String input3, String sort) {
+        boolean flag = false;
+        String input4;
+        do {
+            if (input3.matches( "^[1-9]\\d*$" )) {
+                System.out.println( "Pasirinkite priedą: 1.Pienas, 2.Cukrus, 0.Be priedų" );
+                input4 = scanner.nextLine();
+                if (input4.equals( "1" )) {
+                    selectCoffee( Integer.parseInt( input3 ), PIENAS );
+                    flag = true;
+                    System.out.println( "Užsakymas sėkmingai papildytas" );
+                } else if (input4.equals( "2" )) {
+                    selectCoffee( Integer.parseInt( input3 ), CUKRUS );
+                    flag = true;
+                    System.out.println( "Užsakymas sėkmingai papildytas" );
+                } else if (input4.equals( "0" )) {
+                    selectCoffee( Integer.parseInt( input3 ), NONE );
+                    flag = true;
+                    System.out.println( "Užsakymas sėkmingai papildytas" );
+                } else {
+                    System.out.println( "Tokio pasirinkimo nėra. Bandykite dar kartą." );
+                }
+            } else {
+                System.out.println( "Klaidingai nurodytas kiekis. Bandykite dar kartą" );
+                break;
+            }
+        } while (!flag);
+    }
+
+    static void pickQuantityAndTeaAdd(String input3, String sort) {
+        boolean flag = false;
+        String input4;
+        do {
+            if (input3.matches( "^[1-9]\\d*$" )) {
+                System.out.println( "Pasirinkite priedą: 1.Medus, 2.Cukrus, 0.Be priedų" );
+                input4 = scanner.nextLine();
+                if (input4.equals( "1" )) {
+                    selectTea( Integer.parseInt( input3 ), MEDUS );
+                    flag = true;
+                    System.out.println( "Užsakymas sėkmingai papildytas" );
+                } else if (input4.equals( "2" )) {
+                    selectTea( Integer.parseInt( input3 ), CUKRUS );
+                    flag = true;
+                    System.out.println( "Užsakymas sėkmingai papildytas" );
+                } else if (input4.equals( "0" )) {
+                    selectTea( Integer.parseInt( input3 ), NONE );
+                    flag = true;
+                    System.out.println( "Užsakymas sėkmingai papildytas" );
+                } else {
+                    System.out.println( "Tokio pasirinkimo nėra. Bandykite dar kartą.\n" );
+                }
+            } else {
+                System.out.println( "Klaidingai nurodytas kiekis. Bandykite dar kartą" );
+                break;
+            }
+        } while (!flag);
+    }
+
+
+
+
+
+
+
+    static String[] readFile(String file) {
+        BufferedReader in = null;
+        try {
+            in = new BufferedReader(new FileReader("C:\\Users\\karol\\IdeaProjects\\Picerija_3\\src\\pizzeria\\resources\\" + file));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        Stream<String> line;
+        line = in.lines();
+        line.map(l -> l.split("-")).map(arr -> new MenuItem(arr[0], Double.valueOf(arr[1]))).forEach(System.out::println);
+
+        String[] scores = line.split("-");
+//        System.out.println(Arrays.toString( scores ));
+        Arrays.sort( scores, new Comparator() {
+
+            @Override
+            public int compare(Object o1, Object o2) {
+                int y;
+
+                y = o1.toString().substring( 1, 2 ).compareTo( o2.toString().substring( 1, 2 ));
+                if (o1.toString().charAt( 1 ) == '.' && o2.toString().charAt( 1 ) == '.') {
+                    y = o1.toString().substring( 0, 1 ).compareTo( o2.toString().substring( 0, 1 ) );
+                }
+
+                return y;
+            }
+        } );
+        System.out.println(Arrays.toString( scores ));
+        return scores;
+    }
+}

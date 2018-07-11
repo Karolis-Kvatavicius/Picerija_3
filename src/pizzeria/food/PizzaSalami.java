@@ -6,11 +6,25 @@ public class PizzaSalami implements Food{
     private int quantity;
     private Sauce sauce;
 
-    public PizzaSalami() {
-        this.name = "Saliami pica";
+//    public PizzaSalami() {
+//        this.name = "Saliami pica";
+//        this.quantity = 0;
+//        this.price = 12;
+//        this.sauce = null;
+//    }
+
+    public PizzaSalami(String size){
+        if(size.equals("1")) {
+            this.price = 10.25;
+            this.name = "Maža salami pica";
+        }  else if(size.equals("2")){
+            this.price = 12.00;
+            this.name = "Vidutinė salami pica";
+        }  else {
+            this.price = 13.20;
+            this.name = "Didelė salami pica";
+        }
         this.quantity = 0;
-        this.price = 12;
-        this.sauce = null;
     }
 
     @Override

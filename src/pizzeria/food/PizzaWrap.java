@@ -7,11 +7,25 @@ public class PizzaWrap implements Food{
     private int quantity;
     private Sauce sauce;
 
-    public PizzaWrap() {
-        this.name = "Wrap pica";
+//    public PizzaWrap() {
+//        this.name = "Wrap pica";
+//        this.quantity = 0;
+//        this.price = 10;
+//        this.sauce = null;
+//    }
+
+    public PizzaWrap(String size){
+        if(size.equals("1")) {
+            this.price = 8.25;
+            this.name = "Maža wrap pica";
+        }  else if(size.equals("2")){
+            this.price = 10.20;
+            this.name = "Vidutinė wrap pica";
+        }  else {
+            this.price = 11.20;
+            this.name = "Didelė wrap pica";
+        }
         this.quantity = 0;
-        this.price = 10;
-        this.sauce = null;
     }
 
     @Override

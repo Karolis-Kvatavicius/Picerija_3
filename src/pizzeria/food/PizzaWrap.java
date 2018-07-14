@@ -21,7 +21,7 @@ public class PizzaWrap implements Food{
         }  else if(size.equals("2")){
             this.price = 10.20;
             this.name = "Vidutinė wrap pica";
-        }  else {
+        }  else if(size.equals( "3" )) {
             this.price = 11.20;
             this.name = "Didelė wrap pica";
         }

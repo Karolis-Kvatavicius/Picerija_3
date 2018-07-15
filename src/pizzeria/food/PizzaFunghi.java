@@ -6,22 +6,15 @@ public class PizzaFunghi implements Food {
     private int quantity;
     private Sauce sauce;
 
-//    public PizzaFunghi() {
-//        this.price = 8.5;
-//        this.name = "Funghi pica";
-//        this.quantity = 0;
-//        this.sauce = null;
-//    }
-
     public PizzaFunghi(String size){
         if(size.equals("1")) {
-            this.price = 10.25;
+            this.price = 9.63;
             this.name = "Maža wrap pica";
         }  else if(size.equals("2")){
-            this.price = 14.20;
+            this.price = 11.13;
             this.name = "Vidutinė wrap pica";
         }  else {
-            this.price = 16.20;
+            this.price = 12.75;
             this.name = "Didelė wrap pica";
         }
         this.quantity = 0;

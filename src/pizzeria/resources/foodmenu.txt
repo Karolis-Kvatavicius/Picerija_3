@@ -1,1 +1,4 @@
-﻿3.Pica Saliami 12.51 €,1.Pica Wrap 9.78 €,2.Pica Funghi 10.99 €
+﻿1.Pica Wrap 10.20 €,2.Pica Funghi 11.13 €,3.Pica Saliami 12.00 €,0.Grįžti į pagrindinį meniu
+1. Maža 8.25 €,2.Vidutinė 10.20 €,3. Didelė 11.20 €,0.Grįžti į pagrindinį meniu
+1. Maža 9.63 €,2.Vidutinė 11.13 €,3. Didelė 12.75 €,0.Grįžti į pagrindinį meniu
+1. Maža 10.25 €,2.Vidutinė 12.00 €,3. Didelė 13.20 €,0.Grįžti į pagrindinį meniu

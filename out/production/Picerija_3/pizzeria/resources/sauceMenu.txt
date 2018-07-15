@@ -1,1 +1,1 @@
-11.Švelnus 1.00 €,12.Mixas 1.10 €,13.Aštrus 1.25 €
+﻿1.Švelnus 1.00 €,2.Mixas 1.10 €,3.Aštrus 1.25 €,4.Be padažo 0.00 €,0.Grįžti į pagrindinį meniu

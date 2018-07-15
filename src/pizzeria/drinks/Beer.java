@@ -62,8 +62,4 @@ public class Beer implements Drink {
         return this.addittion.getDrinkAddittionName();
     }
 
-    @Override
-    public DrinkAddittion getDrinkAdd() {
-        return this.addittion;
-    }
 }

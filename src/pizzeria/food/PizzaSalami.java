@@ -6,13 +6,6 @@ public class PizzaSalami implements Food{
     private int quantity;
     private Sauce sauce;
 
-//    public PizzaSalami() {
-//        this.name = "Saliami pica";
-//        this.quantity = 0;
-//        this.price = 12;
-//        this.sauce = null;
-//    }
-
     public PizzaSalami(String size){
         if(size.equals("1")) {
             this.price = 10.25;

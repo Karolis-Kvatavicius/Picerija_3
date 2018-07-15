@@ -53,8 +53,4 @@ public class Coffee implements Drink {
         return this.addittion.getDrinkAddittionName();
     }
 
-    @Override
-    public DrinkAddittion getDrinkAdd() {
-        return this.addittion;
-    }
 }

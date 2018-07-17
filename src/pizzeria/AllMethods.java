@@ -3,10 +3,7 @@ package pizzeria;
 import pizzeria.drinks.*;
 import pizzeria.food.*;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -28,10 +25,11 @@ class AllMethods {
     private static double dailyIncome;
     private static DecimalFormat f = new DecimalFormat( "#0.00 €" );
 
+
     static void printMainMenu() {
         System.out.println();
         System.out.println("Pasirinkite kategoriją:");
-        System.out.println( "1. Gėrimų menu,  2. Maisto menu, 3. Anuliuoti užsakymą, 4. Gauti saskaitą, 0. Išeiti iš programos" );
+        System.out.println( "1. Gėrimų meniu,  2. Maisto meniu, 3. Anuliuoti užsakymą, 4. Gauti saskaitą, 0. Išeiti iš programos" );
 
 
     }
@@ -510,6 +508,7 @@ class AllMethods {
         int i = 0;
         int j = 0;
         if (clientsDishes.size() != 0 || clientsDrinks.size() != 0) {
+
             System.out.println( "Jūsų sąskaita:" );
             System.out.println("----------------------------------------------------------------------------------------");
 
@@ -935,6 +934,10 @@ class AllMethods {
         System.out.println(timeStamp + " dienos pelnas: " + f.format(   dailyIncome - (dailyIncome * 21 / 121)));
     }
 
+    static String returnDate() {
+        return new SimpleDateFormat( "yyyy-MM-dd " ).format( Calendar.getInstance().getTime() );
+    }
+
     private static long fixTime() {
         return System.currentTimeMillis();
     }
@@ -947,5 +950,16 @@ class AllMethods {
     return "slapt2018" ;
     }
 
+    static void writeDailyIncome() {
+        try {
+            BufferedWriter writeLog = new BufferedWriter( new FileWriter( "src\\pizzeria\\log\\log.txt", true ) );
+            PrintWriter printLog = new PrintWriter( writeLog );
+            printLog.println(returnDate() + f.format( dailyIncome ) );
+            writeLog.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 
 }

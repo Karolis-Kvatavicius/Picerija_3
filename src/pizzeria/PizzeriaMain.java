@@ -18,6 +18,7 @@ public class PizzeriaMain {
                     if (input2.equals( password() )) {
                         System.out.println( "Išeinama iš programos\n" );
                         printDailyIncome();
+                        writeDailyIncome();
                         break;
                     } else if (input2.equalsIgnoreCase( "x" )) {
                         System.out.println("Grįžtama į pagrindinį meniu");

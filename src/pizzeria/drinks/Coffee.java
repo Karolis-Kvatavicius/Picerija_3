@@ -33,6 +33,7 @@ public class Coffee implements Drink {
     public double calculateItemPrice() {
         return this.price * this.quantity;
     }
+
     @Override
     public void setQuantity(int quantity) {
         this.quantity = quantity;

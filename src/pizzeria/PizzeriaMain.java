@@ -11,7 +11,7 @@ public class PizzeriaMain {
             printMainMenu();
             input = getScanner().nextLine();
             if (input.equals( "0" )) {
-                System.out.println("Įveskite slaptažodį   X.Grįžti į pagrindinį meniu");
+                System.out.println( "Įveskite slaptažodį   X.Grįžti į pagrindinį meniu" );
 
                 do {
                     input2 = getScanner().nextLine();
@@ -21,12 +21,12 @@ public class PizzeriaMain {
                         writeDailyIncome();
                         break;
                     } else if (input2.equalsIgnoreCase( "x" )) {
-                        System.out.println("Grįžtama į pagrindinį meniu");
+                        System.out.println( "Grįžtama į pagrindinį meniu" );
                         break;
                     } else {
                         System.out.println( "Slaptažodis neteisingas. Bandykite dar kartą arba X.Grįžti į pagrindinį meniu" );
                     }
-                } while(1>0);
+                } while (1 > 0);
             }
             mainLogic( input );
         } while (!input2.equals( password() ));

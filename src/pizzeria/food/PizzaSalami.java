@@ -1,19 +1,19 @@
 package pizzeria.food;
 
-public class PizzaSalami implements Food{
+public class PizzaSalami implements Food {
     private double price;
     private String name;
     private int quantity;
     private Sauce sauce;
 
-    public PizzaSalami(String size){
-        if(size.equals("1")) {
+    public PizzaSalami(String size) {
+        if (size.equals( "1" )) {
             this.price = 10.25;
             this.name = "Maža salami pica";
-        }  else if(size.equals("2")){
+        } else if (size.equals( "2" )) {
             this.price = 12.00;
             this.name = "Vidutinė salami pica";
-        }  else {
+        } else {
             this.price = 13.20;
             this.name = "Didelė salami pica";
         }

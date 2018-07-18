@@ -6,6 +6,9 @@ import pizzeria.food.*;
 import java.io.*;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import static pizzeria.drinks.DrinkAddittion.*;
@@ -28,7 +31,7 @@ class AllMethods {
 
     static void printMainMenu() {
         System.out.println();
-        System.out.println("Pasirinkite kategoriją:");
+        System.out.println( "Pasirinkite kategoriją:" );
         System.out.println( "1. Gėrimų meniu,  2. Maisto meniu, 3. Anuliuoti užsakymą, 4. Gauti saskaitą, 0. Išeiti iš programos" );
 
 
@@ -135,7 +138,7 @@ class AllMethods {
                         System.out.println( "Grįžtama į pagrindinį meniu" );
                         break;
                     }
-                    pickQuantityAndCoffeeAdd( input3);
+                    pickQuantityAndCoffeeAdd( input3 );
                 } while (!input3.matches( "^[1-9]\\d{0,3}$" ));
                 break;
             }
@@ -147,7 +150,7 @@ class AllMethods {
                         System.out.println( "Grįžtama į pagrindinį meniu" );
                         break;
                     }
-                    pickQuantityAndTeaAdd( input3);
+                    pickQuantityAndTeaAdd( input3 );
                 } while (!input3.matches( "^[1-9]\\d{0,3}$" ));
                 break;
             }
@@ -507,10 +510,11 @@ class AllMethods {
         double sum = 0;
         int i = 0;
         int j = 0;
+        String input;
         if (clientsDishes.size() != 0 || clientsDrinks.size() != 0) {
 
             System.out.println( "Jūsų sąskaita:" );
-            System.out.println("----------------------------------------------------------------------------------------");
+            System.out.println( "----------------------------------------------------------------------------------------" );
 
             for (Drink a : clientsDrinks) {
                 System.out.println( a.getName() + ":  kaina: " + f.format( a.getPrice() ) +
@@ -538,15 +542,27 @@ class AllMethods {
                 } else {
                     System.out.println( "Be padažo: 0.00 €" );
                 }
-                sum += a.getSaucePrice() * addFoodQuant.get( j);
+                sum += a.getSaucePrice() * addFoodQuant.get( j );
 
                 j++;
             }
             System.out.println( "Viso suma: " + f.format( sum ) );
-            System.out.println("----------------------------------------------------------------------------------------");
-            System.out.println( getDateTime() );
-            System.out.println( getWaitTime() );
-            emptyOrder();
+            System.out.println( "----------------------------------------------------------------------------------------" );
+
+            System.out.println( "Uzsakimui patvirtinti spauskite 1, atsaukti 0." );
+            input = scanner.nextLine();
+            if (input.equals( "1" )) {
+                System.out.println( "Jusu uzsakymas bus paruostas " + getDateTime() );
+                emptyOrder();
+            } else if (input.equals( "0" )) {
+                System.out.println( "Uzsakymas anuliuotas." );
+                emptyOrder();
+            }
+
+
+            //System.out.println( "Jusu uzsakymas bus paruostas " + getDateTime() );
+            //System.out.println( getWaitTime() );
+            // emptyOrder();
         } else {
             System.out.println( "Jūs dar nieko neužsisakėte." );
         }
@@ -634,7 +650,7 @@ class AllMethods {
             printSubMenu( input );
             dailyIncome += printCheckout();
         } else if (input.equals( "0" )) {
-            System.out.print("");
+            System.out.print( "" );
         } else {
             System.out.println( "Tokio pasirinkimo nėra. Bandykite dar kartą" );
         }
@@ -737,7 +753,7 @@ class AllMethods {
         String input4, input5;
         do {
             if (input3.matches( "^[1-9]\\d{0,3}$" )) {
-                System.out.println( readFile( "drinkaddmenu.txt", 1 ));
+                System.out.println( readFile( "drinkaddmenu.txt", 1 ) );
                 input4 = scanner.nextLine();
                 if (input4.equals( "1" )) {
                     do {
@@ -873,7 +889,7 @@ class AllMethods {
         for (int i = 0; i < lineCount; i++) {
             try {
 
-                    line = in.readLine();
+                line = in.readLine();
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -885,15 +901,15 @@ class AllMethods {
         String[] scores2 = new String[scores.length];
         Arrays.sort( scores );
 
-        if(lineCount == 1 && file.equals( "drinkaddmenu.txt" )) {
+        if (lineCount == 1 && file.equals( "drinkaddmenu.txt" )) {
             temp = scores[2];
             scores[2] = scores[3];
             scores[3] = temp;
         }
 
-        if(scores[0].startsWith( "0" )) {
+        if (scores[0].startsWith( "0" )) {
             for (int i = 0; i < scores2.length - 1; i++) {
-                scores2[i] = scores[i+1];
+                scores2[i] = scores[i + 1];
             }
             scores2[scores2.length - 1] = scores[0];
 
@@ -909,11 +925,14 @@ class AllMethods {
         return menuLine.replaceAll( ",\\s$", "" );
     }
 
+    //    TODO
     private static String getDateTime() {
 
-        return new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" ).format( Calendar.getInstance().getTime() );
+        return LocalDateTime.now().plusMinutes( 10 ).format( DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" ) );
+//        return new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" ).format( Calendar.getInstance().getTime() );
     }
 
+    //    TODO
     private static String getWaitTime() {
         customerCount += 1;
         if (customerCount < Math.floor( (fixTime() - time2) / 600000 )) { // 600 000 = 10 minutes, 10 000 = 10 secs.
@@ -930,8 +949,8 @@ class AllMethods {
 
     static void printDailyIncome() {
         String timeStamp = new SimpleDateFormat( "yyyy-MM-dd" ).format( Calendar.getInstance().getTime() );
-        System.out.println("Jūsų " + timeStamp + " dienos apyvarta: " + f.format( dailyIncome ));
-        System.out.println(timeStamp + " dienos pelnas: " + f.format(   dailyIncome - (dailyIncome * 21 / 121)));
+        System.out.println( "Jūsų " + timeStamp + " dienos apyvarta: " + f.format( dailyIncome ) );
+        System.out.println( timeStamp + " dienos pelnas: " + f.format( dailyIncome - (dailyIncome * 21 / 121) ) );
     }
 
     static String returnDate() {
@@ -946,19 +965,24 @@ class AllMethods {
         return scanner;
     }
 
-    static String password(){
-    return "slapt2018" ;
+    static String password() {
+        return "slapt2018";
     }
 
     static void writeDailyIncome() {
         try {
             BufferedWriter writeLog = new BufferedWriter( new FileWriter( "src\\pizzeria\\log\\log.txt", true ) );
             PrintWriter printLog = new PrintWriter( writeLog );
-            printLog.println(returnDate() + f.format( dailyIncome ) );
+            printLog.println( returnDate() + f.format( dailyIncome ) );
             writeLog.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+    }
+
+    static void readPrices(String menuItem){
+
 
     }
 

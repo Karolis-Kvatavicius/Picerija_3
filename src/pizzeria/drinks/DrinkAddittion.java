@@ -2,11 +2,11 @@ package pizzeria.drinks;
 
 public enum DrinkAddittion {
 
-    CUKRUS(0.2, "Cukrus", "0"),
-    MEDUS(0.6, "Medus" , "0"),
-    CITRINA(0.3, "Citrina" , "0"),
-    PIENAS(0.5, "Pienas" , "0"),
-    NONE(0.0, "Be priedų", "0");
+    CUKRUS( 0.2, "Cukrus", "0" ),
+    MEDUS( 0.6, "Medus", "0" ),
+    CITRINA( 0.3, "Citrina", "0" ),
+    PIENAS( 0.5, "Pienas", "0" ),
+    NONE( 0.0, "Be priedų", "0" );
 
     private double price;
     private String name;
@@ -18,8 +18,10 @@ public enum DrinkAddittion {
         this.quant = quant;
     }
 
-    public String getDrinkAddittionName() {return name;}
-    
+    public String getDrinkAddittionName() {
+        return name;
+    }
+
     public double getDrinkAdditionPrice() {
         return price;
     }

@@ -8,7 +8,7 @@ public class Water implements Drink {
     private DrinkAddittion addittion;
 
     public Water(String sort) {
-        if(sort.equals( "sparkling" )) {
+        if (sort.equals( "sparkling" )) {
             this.price = 1.5;
             this.name = "Gazuotas vanduo";
         } else {
@@ -37,6 +37,7 @@ public class Water implements Drink {
     public double calculateItemPrice() {
         return (this.price * this.quantity);
     }
+
     @Override
     public void setQuantity(int quantity) {
         this.quantity = quantity;

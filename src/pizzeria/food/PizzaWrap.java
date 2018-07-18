@@ -1,20 +1,20 @@
 package pizzeria.food;
 
-public class PizzaWrap implements Food{
+public class PizzaWrap implements Food {
 
     private double price;
     private String name;
     private int quantity;
     private Sauce sauce;
 
-    public PizzaWrap(String size){
-        if(size.equals("1")) {
+    public PizzaWrap(String size) {
+        if (size.equals( "1" )) {
             this.price = 8.25;
             this.name = "Maža wrap pica";
-        }  else if(size.equals("2")){
+        } else if (size.equals( "2" )) {
             this.price = 10.20;
             this.name = "Vidutinė wrap pica";
-        }  else if(size.equals( "3" )) {
+        } else if (size.equals( "3" )) {
             this.price = 11.20;
             this.name = "Didelė wrap pica";
         }

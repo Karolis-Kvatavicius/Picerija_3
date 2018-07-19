@@ -9,7 +9,7 @@ public class PizzeriaMain {
     public static void main(String[] args) {
         String input, input2 = "";
 
-        System.out.println(readPrices( "foodmenu.txt", 1 , 0));
+        System.out.println(readPrices( "foodmenu.txt", 3 , 3, getRegex(3)));
 //        do {
 //            printMainMenu();
 //            input = getScanner().nextLine();

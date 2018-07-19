@@ -1,6 +1,7 @@
 package pizzeria.food;
 
-import static pizzeria.AllMethods.readFile;
+import static pizzeria.AllMethods.getRegex;
+import static pizzeria.AllMethods.readPrices;
 
 public class PizzaFunghi implements Food {
     private double price;
@@ -10,13 +11,13 @@ public class PizzaFunghi implements Food {
 
     public PizzaFunghi(String size) {
         if (size.equals( "1" )) {
-            this.price = Double.parseDouble( readFile ("foodmenu.txt", 3).substring(5,9 ));
+            this.price = readPrices( "foodmenu.txt", 3 , 1, getRegex(3));
             this.name = "Maža wrap pica";
         } else if (size.equals( "2" )) {
-            this.price = 11.13;
+            this.price = readPrices( "foodmenu.txt", 3 , 2, getRegex(3));
             this.name = "Vidutinė wrap pica";
         } else {
-            this.price = 12.75;
+            this.price = readPrices( "foodmenu.txt", 3 , 3, getRegex(3));
             this.name = "Didelė wrap pica";
         }
         this.quantity = 0;

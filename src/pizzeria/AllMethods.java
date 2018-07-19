@@ -29,8 +29,14 @@ public class AllMethods {
     private static List<Integer> addFoodQuant = new ArrayList<>();
     private static double dailyIncome;
     static DecimalFormat f = new DecimalFormat( "#0.00 €" );
-    private static double[] funghiPrice;
 
+    public static String getRegex(int ItemsInMenu) {
+        String regex = "";
+        for(int i = 0; i < ItemsInMenu; i++) {
+            regex += ".+\\s(\\d+\\.\\d{2})";
+        }
+        return regex;
+    }
 
     static void printMainMenu() {
         System.out.println();
@@ -1003,13 +1009,13 @@ public class AllMethods {
 
     }
 
-    static double readPrices(String fileName, int lineToRead, int groups){
+    public static double readPrices(String fileName, int lineToRead, int groups, String regex){
 
-        String line = readFile (fileName, lineToRead);//.matches(  );
-        Pattern pattern = Pattern.compile( "(\\d+\\.\\d{2})" );
+        String line = readFile (fileName, lineToRead);
+        Pattern pattern = Pattern.compile( regex );
         Matcher stringMatcher = pattern.matcher( line );
         stringMatcher.find();
-        return Double.parseDouble( stringMatcher.group(groups) ) ;
+        return Double.parseDouble( stringMatcher.group(groups)) ;
     }
 
 }

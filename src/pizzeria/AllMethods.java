@@ -10,13 +10,15 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static pizzeria.drinks.DrinkAddittion.*;
 import static pizzeria.food.Sauce.*;
 import static pizzeria.food.Sauce.HOT;
 import static pizzeria.food.Sauce.NO_SAUCE;
 
-class AllMethods {
+public class AllMethods {
 
     private static Scanner scanner = new Scanner( System.in );
     private static List<Drink> clientsDrinks = new ArrayList<>();
@@ -26,7 +28,8 @@ class AllMethods {
     private static List<Integer> addDrinkQuant = new ArrayList<>();
     private static List<Integer> addFoodQuant = new ArrayList<>();
     private static double dailyIncome;
-    private static DecimalFormat f = new DecimalFormat( "#0.00 €" );
+    static DecimalFormat f = new DecimalFormat( "#0.00 €" );
+    private static double[] funghiPrice;
 
 
     static void printMainMenu() {
@@ -36,7 +39,16 @@ class AllMethods {
 
 
     }
-
+//    public  static void getMatch(){
+//        try {
+//            String pattern;
+//            Pattern patt = Pattern.compile("(\\d{1,}.\\d+)");
+//            Matcher matcher = patt.matcher(s);
+//            return matcher.matches();
+//        } catch (RuntimeException e) {
+//            return false;
+//        }
+//    }
     private static void printSubMenu(String input) {
 
         switch (input) {
@@ -549,16 +561,22 @@ class AllMethods {
             System.out.println( "Viso suma: " + f.format( sum ) );
             System.out.println( "----------------------------------------------------------------------------------------" );
 
-            System.out.println( "Uzsakimui patvirtinti spauskite 1, atsaukti 0." );
-            input = scanner.nextLine();
-            if (input.equals( "1" )) {
-                System.out.println( "Jusu uzsakymas bus paruostas " + getDateTime() );
-                emptyOrder();
-            } else if (input.equals( "0" )) {
-                System.out.println( "Uzsakymas anuliuotas." );
-                emptyOrder();
-            }
+            System.out.println( "1.Patvirtinti užsakymą  0.Atšaukti" );
 
+            do {
+                input = scanner.nextLine();
+                if (input.equals( "1" )) {
+                    System.out.println( "Jusu uzsakymas bus paruostas " + getDateTime() );
+                    emptyOrder();
+                    break;
+                } else if (input.equals( "0" )) {
+                    System.out.println( "Uzsakymas anuliuotas." );
+                    emptyOrder();
+                    break;
+                } else {
+                    System.out.println( "Tokio pasirinkimo nėra" );
+                }
+            } while (!input.equals( "1" ) || !input.equals( "0" ));
 
             //System.out.println( "Jusu uzsakymas bus paruostas " + getDateTime() );
             //System.out.println( getWaitTime() );
@@ -619,7 +637,7 @@ class AllMethods {
         clientsDishes.add( food1 );
     }
 
-    static void mainLogic(String input) {
+    static void mainLogic(String input, String inputX) {
         String input2;
         if (input.equals( "1" )) {
             do {
@@ -646,9 +664,11 @@ class AllMethods {
         } else if (input.equals( "3" )) {
             printSubMenu( input );
             emptyOrder();
-        } else if (input.equals( "4" )) {
+        } else if (input.equals( "4")) {
             printSubMenu( input );
-            dailyIncome += printCheckout();
+//            if(inputX.equals( password() )) {
+                dailyIncome += printCheckout();
+//            }
         } else if (input.equals( "0" )) {
             System.out.print( "" );
         } else {
@@ -872,7 +892,7 @@ class AllMethods {
         } while (!flag);
     }
 
-    static String readFile(String file, int lineCount) {
+    public static String readFile(String file, int lineCount) {
 
         BufferedReader in = null;
         String line = "";
@@ -973,7 +993,9 @@ class AllMethods {
         try {
             BufferedWriter writeLog = new BufferedWriter( new FileWriter( "src\\pizzeria\\log\\log.txt", true ) );
             PrintWriter printLog = new PrintWriter( writeLog );
-            printLog.println( returnDate() + f.format( dailyIncome ) );
+            if (dailyIncome != 0.0) {
+                printLog.println( returnDate() + f.format( dailyIncome ) );
+            }
             writeLog.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -981,9 +1003,13 @@ class AllMethods {
 
     }
 
-    static void readPrices(String menuItem){
+    static double readPrices(String fileName, int lineToRead, int groups){
 
-
+        String line = readFile (fileName, lineToRead);//.matches(  );
+        Pattern pattern = Pattern.compile( "(\\d+\\.\\d{2})" );
+        Matcher stringMatcher = pattern.matcher( line );
+        stringMatcher.find();
+        return Double.parseDouble( stringMatcher.group(groups) ) ;
     }
 
 }

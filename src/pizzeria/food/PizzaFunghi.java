@@ -1,5 +1,7 @@
 package pizzeria.food;
 
+import static pizzeria.AllMethods.readFile;
+
 public class PizzaFunghi implements Food {
     private double price;
     private String name;
@@ -8,7 +10,7 @@ public class PizzaFunghi implements Food {
 
     public PizzaFunghi(String size) {
         if (size.equals( "1" )) {
-            this.price = 9.63;
+            this.price = Double.parseDouble( readFile ("foodmenu.txt", 3).substring(5,9 ));
             this.name = "Maža wrap pica";
         } else if (size.equals( "2" )) {
             this.price = 11.13;

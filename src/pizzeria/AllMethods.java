@@ -28,15 +28,7 @@ public class AllMethods {
     private static List<Integer> addDrinkQuant = new ArrayList<>();
     private static List<Integer> addFoodQuant = new ArrayList<>();
     private static double dailyIncome;
-    static DecimalFormat f = new DecimalFormat( "#0.00 €" );
-
-    public static String getRegex(int ItemsInMenu) {
-        String regex = "";
-        for(int i = 0; i < ItemsInMenu; i++) {
-            regex += ".+\\s(\\d+\\.\\d{2})";
-        }
-        return regex;
-    }
+    private static DecimalFormat f = new DecimalFormat( "#0.00 €" );
 
     static void printMainMenu() {
         System.out.println();
@@ -45,16 +37,7 @@ public class AllMethods {
 
 
     }
-//    public  static void getMatch(){
-//        try {
-//            String pattern;
-//            Pattern patt = Pattern.compile("(\\d{1,}.\\d+)");
-//            Matcher matcher = patt.matcher(s);
-//            return matcher.matches();
-//        } catch (RuntimeException e) {
-//            return false;
-//        }
-//    }
+
     private static void printSubMenu(String input) {
 
         switch (input) {
@@ -992,7 +975,7 @@ public class AllMethods {
     }
 
     static String password() {
-        return "slapt2018";
+        return "sss";
     }
 
     static void writeDailyIncome() {
@@ -1016,6 +999,14 @@ public class AllMethods {
         Matcher stringMatcher = pattern.matcher( line );
         stringMatcher.find();
         return Double.parseDouble( stringMatcher.group(groups)) ;
+    }
+
+    public static String getRegex(int ItemsInMenu) {
+        String regex = "";
+        for(int i = 0; i < ItemsInMenu; i++) {
+            regex += ".+\\s(\\d+\\.\\d{2})";
+        }
+        return regex;
     }
 
 }

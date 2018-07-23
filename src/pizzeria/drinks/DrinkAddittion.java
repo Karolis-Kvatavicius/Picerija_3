@@ -3,10 +3,10 @@ package pizzeria.drinks;
 public enum DrinkAddittion {
 
     CUKRUS( 0, "Cukrus", "0" ),
-    MEDUS( 0.6, "Medus", "0" ),
-    CITRINA( 0.3, "Citrina", "0" ),
-    PIENAS( 0.5, "Pienas", "0" ),
-    NONE( 0.0, "Be priedų", "0" );
+    MEDUS( 0, "Medus", "0" ),
+    CITRINA( 0, "Citrina", "0" ),
+    PIENAS( 0, "Pienas", "0" ),
+    NONE( 0, "Be priedų", "0" );
 
     private double price;
     private String name;

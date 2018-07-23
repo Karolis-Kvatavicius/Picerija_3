@@ -9,6 +9,7 @@ public class PizzaFunghi implements Food {
     private int quantity;
     private Sauce sauce;
 
+    // EXAMPLE
     public PizzaFunghi(String size) {
         if (size.equals( "1" )) {
             this.price = readPrices( "foodmenu.txt", 3 , 1, getRegex(3));

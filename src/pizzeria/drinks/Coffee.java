@@ -1,5 +1,8 @@
 package pizzeria.drinks;
 
+import static pizzeria.AllMethods.getRegex;
+import static pizzeria.AllMethods.readPrices;
+
 public class Coffee implements Drink {
 
     private double price;
@@ -8,7 +11,7 @@ public class Coffee implements Drink {
     private DrinkAddittion addittion;
 
     public Coffee() {
-        this.price = 1.75;
+        this.price = readPrices( "drinksmenu.txt", 1 , 6, getRegex(7));
         this.name = "Kava";
         this.quantity = 0;
         this.addittion = null;

@@ -1,10 +1,12 @@
 package pizzeria.food;
 
-public enum Sauce {
+import static pizzeria.AllMethods.getRegex;
+import static pizzeria.AllMethods.readPrices;
 
-    MILD( 0, "Švelnus padažas", "0" ),
-    MIX( 0, "Mix padažas", "0" ),
-    HOT( 0, "Aštrus padažas", "0" ),
+public enum Sauce {
+    MILD( readPrices( "sauceMenu.txt", 1 , 1, getRegex(4) ), "Švelnus padažas", "0" ),
+    MIX( readPrices( "sauceMenu.txt", 1 , 2, getRegex(4) ), "Mix padažas", "0" ),
+    HOT( readPrices( "sauceMenu.txt", 1 , 3, getRegex(4) ), "Aštrus padažas", "0" ),
     NO_SAUCE( 0, "Be padažo", "0" );
 
     private double price;

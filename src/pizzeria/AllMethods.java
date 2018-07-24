@@ -6,7 +6,6 @@ import pizzeria.food.*;
 import java.io.*;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -15,8 +14,7 @@ import java.util.regex.Pattern;
 
 import static pizzeria.drinks.DrinkAddittion.*;
 import static pizzeria.food.Sauce.*;
-import static pizzeria.food.Sauce.HOT;
-import static pizzeria.food.Sauce.NO_SAUCE;
+
 
 public class AllMethods {
 
@@ -28,7 +26,8 @@ public class AllMethods {
     private static List<Integer> addDrinkQuant = new ArrayList<>();
     private static List<Integer> addFoodQuant = new ArrayList<>();
     private static double dailyIncome;
-    private static DecimalFormat f = new DecimalFormat( "#0.00 €" );
+    static DecimalFormat f = new DecimalFormat( "#0.00 €" );
+
 
     static void printMainMenu() {
         System.out.println();
@@ -555,11 +554,11 @@ public class AllMethods {
             do {
                 input = scanner.nextLine();
                 if (input.equals( "1" )) {
-                    System.out.println( "Jusu uzsakymas bus paruostas " + getDateTime() );
+                    System.out.println( "Jūsų užsakymas bus paruoštas " + getDateTime() );
                     emptyOrder();
                     break;
                 } else if (input.equals( "0" )) {
-                    System.out.println( "Uzsakymas anuliuotas." );
+                    System.out.println( "Užsakymas anuliuotas." );
                     emptyOrder();
                     break;
                 } else {
@@ -890,7 +889,7 @@ public class AllMethods {
 
 
         try {
-            in = new BufferedReader( new FileReader( "C:\\Users\\karol\\IdeaProjects\\Picerija_3\\src\\pizzeria\\resources\\" + file ) );
+            in = new BufferedReader( new FileReader( "C:\\Users\\Donatos\\Desktop\\PizzaProject\\src\\pizzeria\\resources\\" + file ) );
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -934,14 +933,13 @@ public class AllMethods {
         return menuLine.replaceAll( ",\\s$", "" );
     }
 
-    //    TODO
+
     private static String getDateTime() {
 
         return LocalDateTime.now().plusMinutes( 10 ).format( DateTimeFormatter.ofPattern( "yyyy-MM-dd HH:mm:ss" ) );
-//        return new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" ).format( Calendar.getInstance().getTime() );
     }
 
-    //    TODO
+    // NENAUDOJAMAS
     private static String getWaitTime() {
         customerCount += 1;
         if (customerCount < Math.floor( (fixTime() - time2) / 600000 )) { // 600 000 = 10 minutes, 10 000 = 10 secs.
@@ -975,7 +973,7 @@ public class AllMethods {
     }
 
     static String password() {
-        return "sss";
+        return "slapt2018";
     }
 
     static void writeDailyIncome() {
@@ -1008,5 +1006,4 @@ public class AllMethods {
         }
         return regex;
     }
-
 }

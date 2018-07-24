@@ -1,5 +1,8 @@
 package pizzeria.drinks;
 
+import static pizzeria.AllMethods.getRegex;
+import static pizzeria.AllMethods.readPrices;
+
 public class Beer implements Drink {
 
     private double price;
@@ -10,13 +13,13 @@ public class Beer implements Drink {
     public Beer(String sort) {
 
         if (sort.equals( "dark" )) {
-            this.price = 3.5;
+            this.price = readPrices( "drinksmenu.txt", 1 , 4, getRegex(7));
             this.name = "Tamsus alus";
         } else if (sort.equals( "white" )) {
-            this.price = 3.75;
+            this.price = readPrices( "drinksmenu.txt", 1 , 5, getRegex(7));
             this.name = "Baltas alus";
         } else {
-            this.price = 3;
+            this.price = readPrices( "drinksmenu.txt", 1 , 3, getRegex(7));
             this.name = "Šviesus alus";
         }
 

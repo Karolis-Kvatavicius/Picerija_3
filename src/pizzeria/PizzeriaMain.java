@@ -1,5 +1,7 @@
 package pizzeria;
 
+import java.util.Arrays;
+
 import static pizzeria.AllMethods.*;
 import static pizzeria.drinks.DrinkAddittion.CUKRUS;
 
@@ -7,11 +9,6 @@ public class PizzeriaMain {
 
     public static void main(String[] args) {
         String input, input2 = "";
-        // TODO cia nustatom gerimu ir padazu kainas is failo
-        // TODO Menu item'u kainas nustatom is failo, klasės konstruktoriuje. Žiūrėti PizzaFunghi.
-        CUKRUS.setPrice( readPrices( "drinkaddmenu.txt", 2 , 2, getRegex(3) ));
-
-        System.out.println(readPrices( "drinksmenu.txt", 1 , 4, getRegex(7) ));
 
         do {
             printMainMenu();
@@ -36,5 +33,6 @@ public class PizzeriaMain {
             }
             mainLogic( input, input2 );
         } while (!input2.equals( password() ));
+
     }
 }

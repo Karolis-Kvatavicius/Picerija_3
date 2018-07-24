@@ -2,3 +2,5 @@
 1.Maža 8.25 €,3.Didelė 11.20 €,2.Vidutinė 10.20 €,0.Grįžti į pagrindinį meniu
 3.Didelė 12.75 €,2.Vidutinė 11.13 €,0.Grįžti į pagrindinį meniu,1.Maža 9.63 €
 0.Grįžti į pagrindinį meniu,3.Didelė 13.20 €,1.Maža 10.25 €,2.Vidutinė 12.00 €
+
+

@@ -1,9 +1,6 @@
 package pizzeria;
 
-import java.util.Arrays;
-
 import static pizzeria.AllMethods.*;
-import static pizzeria.drinks.DrinkAddittion.CUKRUS;
 
 public class PizzeriaMain {
 

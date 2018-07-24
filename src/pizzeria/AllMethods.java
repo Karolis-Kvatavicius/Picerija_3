@@ -887,9 +887,9 @@ public class AllMethods {
         String menuLine = "";
         String temp;
 
-
+        //TODO kelias iki resources papkes
         try {
-            in = new BufferedReader( new FileReader( "C:\\Users\\Donatos\\Desktop\\PizzaProject\\src\\pizzeria\\resources\\" + file ) );
+            in = new BufferedReader( new FileReader( "C:\\Users\\karol\\IdeaProjects\\Picerija_3\\src\\pizzeria\\resources\\" + file ) );
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
